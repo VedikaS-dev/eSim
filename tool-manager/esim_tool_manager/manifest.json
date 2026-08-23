@@ -1,0 +1,114 @@
+{
+  "schema_version": 3,
+  "project": "eSim",
+  "profiles": {
+    "core": ["Ngspice", "KiCad"],
+    "mixed_signal": ["Ngspice", "KiCad", "GHDL", "Verilator"],
+    "verilog": ["KiCad", "Ngspice", "Verilator"],
+    "modelica": ["Ngspice", "OpenModelica"]
+  },
+  "tools": [
+    {
+      "name": "Ngspice",
+      "executable": "ngspice",
+      "version_args": ["-v"],
+      "required": true,
+      "min_version": "40",
+      "package_ids": {
+        "apt-get": "ngspice",
+        "dnf": "ngspice",
+        "pacman": "ngspice",
+        "winget": "ngspice.ngspice",
+        "choco": "ngspice",
+        "brew": "ngspice"
+      },
+      "package_type": {
+        "brew": "formula"
+      },
+      "depends_on": [],
+      "environment": {
+        "ESIM_NGSPICE": "{path}"
+      },
+      "notes": "Core eSim circuit-simulation backend. Verify package IDs against the host package registry before production rollout."
+    },
+    {
+      "name": "KiCad",
+      "executable": "kicad-cli",
+      "version_args": ["version"],
+      "required": true,
+      "min_version": "8",
+      "package_ids": {
+        "apt-get": "kicad",
+        "dnf": "kicad",
+        "pacman": "kicad",
+        "winget": "KiCad.KiCad",
+        "choco": "kicad",
+        "brew": "kicad"
+      },
+      "package_type": {
+        "brew": "cask"
+      },
+      "depends_on": ["Ngspice"],
+      "environment": {
+        "ESIM_KICAD_CLI": "{path}"
+      },
+      "notes": "eSim schematic/PCB integration. KiCad CLI is used for machine-manageable version discovery."
+    },
+    {
+      "name": "GHDL",
+      "executable": "ghdl",
+      "version_args": ["--version"],
+      "required": false,
+      "min_version": "4",
+      "package_ids": {
+        "apt-get": "ghdl",
+        "dnf": "ghdl",
+        "pacman": "ghdl",
+        "winget": "GHDL.GHDL",
+        "choco": "ghdl"
+      },
+      "depends_on": [],
+      "environment": {
+        "ESIM_GHDL": "{path}"
+      },
+      "notes": "Used by NGHDL/mixed-signal workflows. Compatibility can depend on the host LLVM toolchain."
+    },
+    {
+      "name": "Verilator",
+      "executable": "verilator",
+      "version_args": ["--version"],
+      "required": false,
+      "min_version": "5",
+      "package_ids": {
+        "apt-get": "verilator",
+        "dnf": "verilator",
+        "pacman": "verilator",
+        "winget": "Verilator.Verilator",
+        "choco": "verilator",
+        "brew": "verilator"
+      },
+      "depends_on": [],
+      "environment": {
+        "ESIM_VERILATOR": "{path}"
+      },
+      "notes": "Used by Verilog/TL-Verilog workflows and NGHDL-related tooling."
+    },
+    {
+      "name": "OpenModelica",
+      "executable": "omc",
+      "version_args": ["--version"],
+      "required": false,
+      "min_version": "1",
+      "package_ids": {
+        "apt-get": "openmodelica",
+        "dnf": "openmodelica",
+        "brew": "openmodelica"
+      },
+      "depends_on": ["Ngspice"],
+      "environment": {
+        "ESIM_OMC": "{path}"
+      },
+      "notes": "Optional Modelica integration. Treat as an optional capability rather than a core eSim runtime dependency."
+    }
+  ]
+}
